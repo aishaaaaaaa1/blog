@@ -1,0 +1,12 @@
+.git
+.gitignore
+*.md
+.classpath
+.project
+.settings
+bin
+build
+target
+*.bat
+*.log
+.idea
