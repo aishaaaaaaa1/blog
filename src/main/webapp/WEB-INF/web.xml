@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="5.0"
+    xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd">
+
+    <display-name>Blogg</display-name>
+
+    <listener>
+        <listener-class>fr.blogg.listener.DbInitListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>jakarta.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>messages</param-value>
+    </context-param>
+
+    <!-- Base de données PostgreSQL (stable, puissant, bon support cloud) -->
+    <context-param>
+        <param-name>jdbc.driver</param-name>
+        <param-value>org.postgresql.Driver</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbc.url</param-name>
+        <param-value>jdbc:postgresql://localhost:5432/blogg</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbc.user</param-name>
+        <param-value>postgres</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbc.password</param-name>
+        <!-- Mot de passe de l'utilisateur postgres (celui choisi à l'install PostgreSQL). Vide = pas de mot de passe. -->
+        <param-value>12345678</param-value>
+    </context-param>
+
+    <!-- Configuration SMTP Gmail -->
+    <context-param>
+        <param-name>mail.smtp.host</param-name>
+        <param-value>smtp.gmail.com</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mail.smtp.port</param-name>
+        <param-value>587</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mail.smtp.user</param-name>
+        <param-value>aichaoutajer2@gmail.com</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mail.smtp.password</param-name>
+        <param-value>teobbofgpttguhbh</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mail.from</param-name>
+        <param-value>aichaoutajer2@gmail.com</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mail.from.name</param-name>
+        <param-value>Blogg</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>fr.blogg.servlet.HomeServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+        <welcome-file>default.xhtml</welcome-file>
+    </welcome-file-list>
+
+</web-app>

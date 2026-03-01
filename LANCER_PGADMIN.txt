@@ -1,0 +1,9 @@
+Pour ouvrir pgAdmin 4 depuis ce projet :
+
+  --> Double-clic sur :  lancer_pgAdmin4.bat
+
+Si l'erreur "No module named 'pgadmin'" revient :
+
+  --> Double-clic sur :  reparer_et_lancer_pgAdmin4.bat
+
+(PostgreSQL 17 au lieu de 18 ? Ouvre chaque .bat et remplace 18 par 17 dans les chemins.)

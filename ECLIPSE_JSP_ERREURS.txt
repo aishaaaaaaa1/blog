@@ -1,0 +1,14 @@
+Si les erreurs JSP (croix rouges) restent après les corrections :
+
+1. Rafraîchir le projet : clic droit sur "blogg" → Refresh (F5).
+
+2. Nettoyer le projet : menu Project → Clean… → choisir "blogg" → OK.
+
+3. Vérifier le Build Path : clic droit sur le projet → Build Path → Configure Build Path
+   → onglet Libraries. Vous devez voir :
+   - "Web App Libraries" (avec les 2 JAR JSTL dans WEB-INF/lib)
+   - et/ou les 2 entrées "jakarta.servlet.jsp.jstl-api-3.0.0.jar" et "jakarta.servlet.jsp.jstl-3.0.1.jar"
+
+4. Si "JSTL 1.2" apparaît dans Add Libraries, vous pouvez l'ajouter en plus (Build Path → Add Libraries → JSTL 1.2).
+
+Les JSP utilisent maintenant les URI classiques (http://java.sun.com/jsp/jstl/core et .../fmt) reconnues par Eclipse et par le JAR Jakarta JSTL en exécution.

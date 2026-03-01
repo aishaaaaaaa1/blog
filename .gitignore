@@ -1,0 +1,30 @@
+# Build
+build/
+target/
+*.class
+
+# Eclipse
+.settings/
+.project
+.classpath
+.metadata/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Fichiers sensibles (optionnel : décommenter si tu ne veux pas pousser web.xml avec mots de passe)
+# src/main/webapp/WEB-INF/web.xml
+
+# Données locales / uploads
+uploads/
+data/
