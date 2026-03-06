@@ -6,7 +6,15 @@
 <jsp:include page="../include/header.jsp"/>
 <div class="card auth-card">
   <h1><fmt:message key="registerSuccess.title" bundle="${msg}"/></h1>
-  <div class="alert alert-info"><fmt:message key="registerSuccess.message" bundle="${msg}"/></div>
+  <c:choose>
+    <c:when test="${not empty validationUrl}">
+      <div class="alert alert-info"><fmt:message key="message.register.validateEmailFallback" bundle="${msg}"/></div>
+      <p class="mt-2"><a href="${validationUrl}" class="btn-cta"><fmt:message key="message.register.clickToValidate" bundle="${msg}"/></a></p>
+    </c:when>
+    <c:otherwise>
+      <div class="alert alert-info"><fmt:message key="message.register.validateEmail" bundle="${msg}"/></div>
+    </c:otherwise>
+  </c:choose>
   <p class="mt-2"><a href="${pageContext.request.contextPath}/login"><fmt:message key="menu.login" bundle="${msg}"/></a></p>
 </div>
 <jsp:include page="../include/footer.jsp"/>

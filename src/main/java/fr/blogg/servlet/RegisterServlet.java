@@ -12,9 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
-/**
- * Servlet d'inscription : validation par email (lien envoyé par email, jamais affiché).
- */
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
@@ -53,20 +50,22 @@ public class RegisterServlet extends HttpServlet {
         member.setEmail(email);
         member.setPasswordHash(password);
         member.setPseudo(pseudo.trim());
-        member.setValidationToken(UUID.randomUUID().toString());
+        String token = UUID.randomUUID().toString();
+        member.setValidationToken(token);
         memberDao.save(member);
 
+        String baseUrl = req.getRequestURL().toString().replace(req.getRequestURI(), req.getContextPath());
+        String validationUrl = baseUrl + "/validate?token=" + token;
+
         EmailService emailService = new EmailService(getServletContext());
-        boolean emailSent = emailService.sendValidationEmail(member.getEmail(), member.getPseudo(), member.getValidationToken(), req);
+        boolean emailSent = emailService.sendValidationEmail(member.getEmail(), member.getPseudo(), token, req);
 
-        if (!emailSent) {
-            memberDao.deleteById(member.getId());
-            req.setAttribute("error", "error.register.emailFailed");
-            doGet(req, resp);
-            return;
+        if (emailSent) {
+            req.setAttribute("message", "message.register.validateEmail");
+        } else {
+            req.setAttribute("message", "message.register.validateEmailFallback");
+            req.setAttribute("validationUrl", validationUrl);
         }
-
-        req.setAttribute("message", "message.register.validateEmail");
         req.getRequestDispatcher("/WEB-INF/jsp/auth/registerSuccess.jsp").forward(req, resp);
     }
 }

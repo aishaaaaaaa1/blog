@@ -1,3 +1,12 @@
+---
+title: Blog
+emoji: 📝
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+---
+
 # Blogg
 
 Blog professionnel réalisé avec **Servlets**, **JSP** et **JSTL** (objectif pédagogique).

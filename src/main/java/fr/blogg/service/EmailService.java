@@ -8,10 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Properties;
 
-/**
- * Envoi d'emails (lien de validation d'inscription).
- * Configuration SMTP dans web.xml (context-param) ou par défaut désactivée.
- */
 public class EmailService {
 
     private static final String PARAM_SMTP_HOST = "mail.smtp.host";
@@ -36,10 +32,6 @@ public class EmailService {
         return getParam(PARAM_SMTP_HOST, "").length() > 0;
     }
 
-    /**
-     * Envoie l'email de validation avec le lien d'activation.
-     * @return true si l'email a été envoyé, false si SMTP non configuré ou erreur
-     */
     public boolean sendValidationEmail(String toEmail, String pseudo, String validationToken, HttpServletRequest request) {
         if (!isConfigured()) {
             return false;
@@ -49,14 +41,24 @@ public class EmailService {
             String validationUrl = baseUrl + "/validate?token=" + validationToken;
 
             Properties props = new Properties();
-            props.put("mail.smtp.host", getParam(PARAM_SMTP_HOST, "localhost"));
-            props.put("mail.smtp.port", getParam(PARAM_SMTP_PORT, "25"));
+            String host = getParam(PARAM_SMTP_HOST, "localhost");
+            String port = getParam(PARAM_SMTP_PORT, "587");
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.port", port);
             String user = getParam(PARAM_SMTP_USER, "");
             String password = getParam(PARAM_SMTP_PASSWORD, "");
             if (user.length() > 0) {
                 props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
+                if ("465".equals(port)) {
+                    props.put("mail.smtp.ssl.enable", "true");
+                    props.put("mail.smtp.socketFactory.port", port);
+                    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                } else {
+                    props.put("mail.smtp.starttls.enable", "true");
+                }
             }
+            props.put("mail.smtp.connectiontimeout", "10000");
+            props.put("mail.smtp.timeout", "10000");
             Session session = Session.getInstance(props, user.length() > 0 ? new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {

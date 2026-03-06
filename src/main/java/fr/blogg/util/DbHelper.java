@@ -6,10 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Fournit les connexions JDBC à la base H2.
- * L'URL est enregistrée au démarrage par DbInitListener.
- */
 public final class DbHelper {
 
     private static volatile String jdbcUrl;
@@ -23,10 +19,17 @@ public final class DbHelper {
         String envUser = System.getenv("JDBC_USER");
         String envPass = System.getenv("JDBC_PASSWORD");
 
+        if ((envUrl == null || envUrl.isBlank()) && System.getenv("DATABASE_URL") != null) {
+            parseDatabaseUrl(System.getenv("DATABASE_URL"));
+            System.out.println("[DbHelper] Connexion via DATABASE_URL -> " + jdbcUrl);
+            return;
+        }
+
         if (envUrl != null && !envUrl.isBlank()) {
             jdbcUrl = envUrl;
             jdbcUser = nonBlank(envUser, "postgres");
             jdbcPassword = envPass != null ? envPass : "";
+            System.out.println("[DbHelper] Connexion via variables d'env -> " + jdbcUrl);
         } else {
             String url = ctx.getInitParameter("jdbc.url");
             if (url == null || url.isBlank()) {
@@ -36,6 +39,28 @@ public final class DbHelper {
             jdbcUser = nonBlank(ctx.getInitParameter("jdbc.user"), "postgres");
             jdbcPassword = ctx.getInitParameter("jdbc.password");
             if (jdbcPassword == null) jdbcPassword = "";
+            System.out.println("[DbHelper] Connexion via web.xml -> " + jdbcUrl);
+        }
+    }
+
+    private static void parseDatabaseUrl(String databaseUrl) {
+        try {
+            String cleaned = databaseUrl;
+            if (cleaned.startsWith("postgres://")) {
+                cleaned = "postgresql://" + cleaned.substring("postgres://".length());
+            }
+            if (!cleaned.startsWith("postgresql://")) {
+                throw new IllegalArgumentException("Format DATABASE_URL inconnu: " + databaseUrl);
+            }
+            String rest = cleaned.substring("postgresql://".length());
+            String userInfo = rest.substring(0, rest.indexOf('@'));
+            String hostAndDb = rest.substring(rest.indexOf('@') + 1);
+
+            jdbcUser = userInfo.contains(":") ? userInfo.substring(0, userInfo.indexOf(':')) : userInfo;
+            jdbcPassword = userInfo.contains(":") ? userInfo.substring(userInfo.indexOf(':') + 1) : "";
+            jdbcUrl = "jdbc:postgresql://" + hostAndDb;
+        } catch (Exception e) {
+            System.err.println("[DbHelper] Erreur parsing DATABASE_URL: " + e.getMessage());
         }
     }
 
