@@ -31,7 +31,7 @@
     <context-param>
         <param-name>jdbc.password</param-name>
         <!-- Mot de passe de l'utilisateur postgres (celui choisi à l'install PostgreSQL). Vide = pas de mot de passe. -->
-        <param-value>12345678</param-value>
+        <param-value>postgres</param-value>
     </context-param>
 
     <!-- Configuration SMTP Gmail -->

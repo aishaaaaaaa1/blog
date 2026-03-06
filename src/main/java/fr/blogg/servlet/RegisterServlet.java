@@ -39,10 +39,14 @@ public class RegisterServlet extends HttpServlet {
         }
 
         email = email.trim().toLowerCase();
-        if (memberDao.findByEmail(email) != null) {
-            req.setAttribute("error", "error.register.emailExists");
-            doGet(req, resp);
-            return;
+        Member existing = memberDao.findByEmail(email);
+        if (existing != null) {
+            if (existing.isEmailValidated()) {
+                req.setAttribute("error", "error.register.emailExists");
+                doGet(req, resp);
+                return;
+            }
+            memberDao.deleteById(existing.getId());
         }
 
         Member member = new Member();
@@ -53,7 +57,14 @@ public class RegisterServlet extends HttpServlet {
         memberDao.save(member);
 
         EmailService emailService = new EmailService(getServletContext());
-        emailService.sendValidationEmail(member.getEmail(), member.getPseudo(), member.getValidationToken(), req);
+        boolean emailSent = emailService.sendValidationEmail(member.getEmail(), member.getPseudo(), member.getValidationToken(), req);
+
+        if (!emailSent) {
+            memberDao.deleteById(member.getId());
+            req.setAttribute("error", "error.register.emailFailed");
+            doGet(req, resp);
+            return;
+        }
 
         req.setAttribute("message", "message.register.validateEmail");
         req.getRequestDispatcher("/WEB-INF/jsp/auth/registerSuccess.jsp").forward(req, resp);

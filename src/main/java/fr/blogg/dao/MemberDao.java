@@ -60,6 +60,18 @@ public class MemberDao {
         return null;
     }
 
+    public void deleteById(Long id) {
+        if (id == null) return;
+        String sql = "DELETE FROM member WHERE id = ?";
+        try (Connection conn = DbHelper.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("MemberDao.deleteById", e);
+        }
+    }
+
     public Member save(Member m) {
         try (Connection conn = DbHelper.getConnection()) {
             if (m.getId() == null) {

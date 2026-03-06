@@ -19,14 +19,24 @@ public final class DbHelper {
     private DbHelper() {}
 
     public static void init(ServletContext ctx) {
-        String url = ctx.getInitParameter("jdbc.url");
-        if (url == null || url.isBlank()) {
-            url = "jdbc:postgresql://localhost:5432/blogg";
+        String envUrl = System.getenv("JDBC_URL");
+        String envUser = System.getenv("JDBC_USER");
+        String envPass = System.getenv("JDBC_PASSWORD");
+
+        if (envUrl != null && !envUrl.isBlank()) {
+            jdbcUrl = envUrl;
+            jdbcUser = nonBlank(envUser, "postgres");
+            jdbcPassword = envPass != null ? envPass : "";
+        } else {
+            String url = ctx.getInitParameter("jdbc.url");
+            if (url == null || url.isBlank()) {
+                url = "jdbc:postgresql://localhost:5432/blogg";
+            }
+            jdbcUrl = url;
+            jdbcUser = nonBlank(ctx.getInitParameter("jdbc.user"), "postgres");
+            jdbcPassword = ctx.getInitParameter("jdbc.password");
+            if (jdbcPassword == null) jdbcPassword = "";
         }
-        jdbcUrl = url;
-        jdbcUser = nonBlank(ctx.getInitParameter("jdbc.user"), "postgres");
-        jdbcPassword = ctx.getInitParameter("jdbc.password");
-        if (jdbcPassword == null) jdbcPassword = "";
     }
 
     private static String nonBlank(String v, String def) {
