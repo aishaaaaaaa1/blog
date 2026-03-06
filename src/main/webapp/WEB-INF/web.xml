@@ -22,15 +22,15 @@
     </context-param>
     <context-param>
         <param-name>jdbc.url</param-name>
-        <param-value>jdbc:postgresql://ep-divine-hat-aiyvk2bw-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require</param-value>
+        <param-value>jdbc:postgresql://localhost:5432/blogg</param-value>
     </context-param>
     <context-param>
         <param-name>jdbc.user</param-name>
-        <param-value>neondb_owner</param-value>
+        <param-value>postgres</param-value>
     </context-param>
     <context-param>
         <param-name>jdbc.password</param-name>
-        <param-value>npg_tJNpSImj0dQ1</param-value>
+        <param-value>postgres</param-value>
     </context-param>
 
     <!-- Configuration SMTP Gmail -->

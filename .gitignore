@@ -25,6 +25,9 @@ Thumbs.db
 # Fichiers sensibles (optionnel : décommenter si tu ne veux pas pousser web.xml avec mots de passe)
 # src/main/webapp/WEB-INF/web.xml
 
+# JARs (Eclipse only, Maven handles deps in Docker build)
+src/main/webapp/WEB-INF/lib/*.jar
+
 # Données locales / uploads
 uploads/
 data/
