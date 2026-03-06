@@ -57,8 +57,9 @@ public class EmailService {
                     props.put("mail.smtp.starttls.enable", "true");
                 }
             }
-            props.put("mail.smtp.connectiontimeout", "10000");
-            props.put("mail.smtp.timeout", "10000");
+            props.put("mail.smtp.connectiontimeout", "3000");
+            props.put("mail.smtp.timeout", "3000");
+            props.put("mail.smtp.writetimeout", "3000");
             Session session = Session.getInstance(props, user.length() > 0 ? new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
